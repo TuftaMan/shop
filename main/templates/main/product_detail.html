@@ -57,10 +57,19 @@
 
             <!-- Add to cart -->
             <div>
-                <button id="add-to-cart-btn"
-                        class="w-full bg-black text-white py-3 text-sm font-medium hover:bg-gray-800 transition">
-                    ДОБАВИТЬ В КОРЗИНУ
-                </button>
+                <form 
+                    hx-post="{% url 'cart:add_to_cart' product.slug %}" 
+                    hx-target="#main-cart-modal" 
+                    hx-swap="innerHTML"
+                    class="w-full">
+
+                    <input type="hidden" name="quantity" value="1">
+
+                    <button type="submit"
+                            class="w-full bg-black text-white py-3 text-sm font-medium hover:bg-gray-800 transition">
+                        ДОБАВИТЬ В КОРЗИНУ
+                    </button>
+                </form>
             </div>
 
             <!-- Description -->

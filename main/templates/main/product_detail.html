@@ -1,0 +1,147 @@
+{% block main_content %}
+
+<main class="page mx-auto px-4 sm:px-6 lg:px-8 py-8" id="product-page">
+
+    <!-- Breadcrumb -->
+    <div class="mb-6 text-sm text-gray-500">
+        <a hx-get="{% url 'main:index' %}" hx-target="#main-content" hx-push-url="true" 
+           class="hover:text-black">HOME</a>
+        <span class="mx-2">/</span>
+        <a hx-get="{% url 'main:catalog' product.category.slug %}" hx-target="#main-content" hx-push-url="true"
+           class="hover:text-black">{{ product.category.name|upper }}</a>
+        <span class="mx-2">/</span>
+        <span class="text-gray-900">{{ product.name|upper }}</span>
+    </div>
+
+    <section class="grid grid-cols-1 lg:grid-cols-[1fr,0.9fr] gap-10">
+
+        <!-- LEFT: gallery -->
+        <div class="preview__gallery flex flex-col gap-4">
+
+            <!-- Main image -->
+            <div class="w-full bg-gray-100 aspect-square overflow-hidden" id="main-image-wrap">
+                {% if product.main_image %}
+                    <img id="main-image" src="{{ product.main_image.url }}" class="w-full h-full object-cover">
+                {% else %}
+                    <div class="w-full h-full flex items-center justify-center text-gray-400">No Image</div>
+                {% endif %}
+            </div>
+
+            <!-- Thumbnails similar to dissident -->
+            {% if product.images.all %}
+            <div class="grid grid-cols-4 gap-2">
+                {% for image in product.images.all %}
+                <div class="aspect-square bg-gray-100 overflow-hidden cursor-pointer hover:opacity-80">
+                    <img src="{{ image.image.url }}"
+                         class="w-full h-full object-cover"
+                         onclick="changeMainImage('{{ image.image.url }}')">
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- RIGHT: details -->
+        <div class="details space-y-8">
+
+            <div>
+                <h1 class="text-2xl sm:text-3xl font-bold tracking-tight">{{ product.name }}</h1>
+                {% if product.color %}
+                <p class="text-gray-500 text-base">{{ product.color }}</p>
+                {% endif %}
+            </div>
+
+            <div class="price__block">
+                <p class="text-3xl font-semibold">{{ product.price }} ₽</p>
+            </div>
+
+            <!-- Add to cart -->
+            <div>
+                <button id="add-to-cart-btn"
+                        class="w-full bg-black text-white py-3 text-sm font-medium hover:bg-gray-800 transition">
+                    ДОБАВИТЬ В КОРЗИНУ
+                </button>
+            </div>
+
+            <!-- Description -->
+            <div class="border-t pt-6">
+                <h3 class="text-sm font-medium text-black mb-3">ОПИСАНИЕ:</h3>
+                <div class="text-gray-600 prose prose-sm">
+                    {{ product.description|linebreaks }}
+                </div>
+            </div>
+
+            <!-- Info blocks (your custom fields) -->
+            <div class="components grid grid-cols-1 sm:grid-cols-2 gap-y-4 border-t pt-6">
+
+                {% if product.created_at %}
+                <div>
+                    <h4 class="font-medium text-sm">Created:</h4>
+                    <p class="text-gray-700">{{ product.created_at|date:"F d, Y" }}</p>
+                </div>
+                {% endif %}
+
+                {% if product.size %}
+                <div>
+                    <h4 class="font-medium text-sm">Size:</h4>
+                    <p class="text-gray-700">{{ product.size }}</p>
+                </div>
+                {% endif %}
+
+                {% if product.material %}
+                <div>
+                    <h4 class="font-medium text-sm">Material:</h4>
+                    <p class="text-gray-700">{{ product.material }}</p>
+                </div>
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- Related products -->
+    {% if related_products %}
+    <section class="mt-20 border-t pt-10">
+        <h2 class="text-lg font-bold mb-6">ТАКЖЕ ПОКУПАЮТ</h2>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+            {% for related_product in related_products %}
+            <div class="cursor-pointer group"
+                 hx-get="{% url 'main:product_detail' related_product.slug %}"
+                 hx-target="#main-content"
+                 hx-push-url="true">
+
+                <div class="aspect-square bg-gray-100 overflow-hidden mb-3">
+                    {% if related_product.main_image %}
+                        <img src="{{ related_product.main_image.url }}"
+                             class="w-full h-full object-cover group-hover:opacity-90 transition">
+                    {% else %}
+                        <div class="w-full h-full flex items-center justify-center text-gray-400">
+                            No Image
+                        </div>
+                    {% endif %}
+                </div>
+
+                <h3 class="text-sm font-medium text-gray-900">{{ related_product.name }}</h3>
+                {% if related_product.color %}
+                <p class="text-xs text-gray-500">{{ related_product.color }}</p>
+                {% endif %}
+                <p class="text-sm text-gray-900">{{ related_product.price }} ₽</p>
+
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+</main>
+
+<script>
+function changeMainImage(src) {
+    document.getElementById("main-image").src = src;
+}
+</script>
+
+{% endblock %}

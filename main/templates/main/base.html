@@ -1,0 +1,122 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Мой Магазин{% endblock %}</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+</head>
+<body class="bg-white">
+
+<header class="sticky top-0 bg-white shadow z-50">
+    <div class="container mx-auto flex justify-between items-center p-4">
+        <!-- ЛЕВАЯ ЧАСТЬ — ВЫПАДАЮЩЕЕ МЕНЮ + ЛОГОТИП -->
+        <div class="flex items-center space-x-3">
+            <!-- Кнопка меню -->
+            <div class="relative">
+                <button id="menu-button" class="flex items-center">
+                    <img src="{% static 'main/three-line-horizontal.svg' %}" alt="Меню" class="h-10 cursor-pointer">
+                </button>
+                
+                <!-- Выпадающее меню -->
+                <div id="dropdown-menu" class="hidden absolute left-0 mt-2 w-40 bg-white shadow-lg border rounded-lg overflow-hidden">
+                    <button hx-get="{% url 'main:catalog_all' %}" 
+                            hx-target="#main-content" 
+                            hx-push-url="true" 
+                            class="w-full text-left px-4 py-2 hover:bg-gray-100">
+                        Магазин
+                    </button>
+                    <button hx-get="{% url 'main:about' %}" 
+                            hx-target="#main-content" 
+                            hx-push-url="true" 
+                            class="w-full text-left px-4 py-2 hover:bg-gray-100">
+                        О нас
+                    </button>
+                </div>
+            </div>
+            <!-- ЛОГОТИП (переход на главную) -->
+            <a href="{% url 'main:index' %}"
+                class="flex items-center">
+                <img src="{% static 'main/DRIFT.png' %}" 
+                    alt="DriftWood" 
+                    class="h-7 cursor-pointer hover:opacity-80 transition">
+            </a>
+        </div>
+
+        <!-- ПРАВАЯ ЧАСТЬ — ИКОНКА КОРЗИНЫ -->
+        <div>
+            <button id="cart-button" class="relative">
+                <img src="{% static 'main/7784863.png' %}" alt="Корзина" class="h-8">
+            </button>
+        </div>
+    </div>
+</header>
+
+
+<!-- ОСНОВНОЙ КОНТЕЙНЕР HTMX -->
+<main id="main-content">
+    {% block main_content %}
+    <!-- Главная большая картинка -->
+    <a
+        hx-get="{% url 'main:catalog_all' %}"
+        hx-target="#main-content"
+        hx-push-url="true"
+    >
+        <img src="{% static 'main/1.png' %}" alt="Главная" class="w-full h-screen object-cover cursor-pointer">
+    </a>
+    {% endblock %}
+</main>
+
+
+
+<footer class="bg-gray-100 py-8 mt-8">
+    <div class="container mx-auto text-center text-white-700">
+        <p>© 2025 Мой Магазин. Все права защищены.</p>
+    </div>
+</footer>
+
+
+<script>
+// Функция инициализации меню
+function initMenu() {
+    const menuButton = document.getElementById("menu-button");
+    const dropdownMenu = document.getElementById("dropdown-menu");
+    
+    if (!menuButton || !dropdownMenu) return;
+
+    // Удаляем старые обработчики (если есть)
+    const newMenuButton = menuButton.cloneNode(true);
+    menuButton.parentNode.replaceChild(newMenuButton, menuButton);
+    
+    // Переопределяем переменные после клонирования
+    const btn = document.getElementById("menu-button");
+    const menu = document.getElementById("dropdown-menu");
+
+    // Открытие/закрытие меню
+    btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        menu.classList.toggle("hidden");
+    });
+
+    // Закрытие меню по клику вне его
+    document.addEventListener("click", (e) => {
+        if (!btn.contains(e.target) && !menu.contains(e.target)) {
+            menu.classList.add("hidden");
+        }
+    });
+
+    // Закрытие меню после клика внутри
+    const menuItems = menu.querySelectorAll("button, a");
+    menuItems.forEach(item => {
+        item.addEventListener("click", () => {
+            menu.classList.add("hidden");
+        });
+    });
+}
+
+
+</body>
+</html>

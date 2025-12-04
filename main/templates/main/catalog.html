@@ -1,0 +1,57 @@
+{% load static %}
+
+<div class="container mx-auto px-4 py-8">
+
+    <!-- КАТЕГОРИИ -->
+    <div class="flex flex-wrap gap-4 mb-10">
+
+        <!-- Кнопка ALL -->
+        <button
+            hx-get="{% url 'main:catalog_all' %}"
+            hx-target="#main-content"
+            hx-push-url="true"
+            class="px-4 py-2 border rounded-lg hover:bg-gray-100
+                   {% if not current_category %}bg-black text-white{% endif %}">
+            ВСЕ ТОВАРЫ
+        </button>
+
+        {% for category in categories %}
+            <button
+                hx-get="{% url 'main:catalog' category.slug %}"
+                hx-target="#main-content"
+                hx-push-url="true"
+                class="px-4 py-2 border rounded-lg hover:bg-gray-100
+                       {% if current_category == category.slug %}bg-black text-white{% endif %}">
+                {{ category.name|upper }}
+            </button>
+        {% endfor %}
+    </div>
+
+    <!-- ТОВАРЫ -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+
+        {% for product in products %}
+            <a href="{% url 'main:product_detail' product.slug %}"
+                hx-get="{% url 'main:product_detail' product.slug %}"
+                hx-target="#main-content"
+                hx-push-url="true"
+                class="product-card border p-4 hover:shadow-lg transition block">
+
+                    <!-- Картинка товара -->
+                    <img src="{{ product.main_image.url }}"
+                        alt="{{ product.name }}"
+                        class="product-image w-full h-64 object-cover mb-4">
+
+                    <!-- Название -->
+                    <h3 class="text-lg font-semibold mb-2">{{ product.name }}</h3>
+
+                    <!-- Цена -->
+                    <p class="text-gray-700 font-medium">{{ product.price }} ₽</p>
+            </a>
+        {% empty %}
+            <p class="text-gray-600">Нет товаров в этой категории.</p>
+        {% endfor %}
+
+    </div>
+
+</div>

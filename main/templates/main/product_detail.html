@@ -4,8 +4,8 @@
 
     <!-- Breadcrumb -->
     <div class="mb-6 text-sm text-gray-500">
-        <a hx-get="{% url 'main:index' %}" hx-target="#main-content" hx-push-url="true" 
-           class="hover:text-black">Главная</a>
+        <a hx-get="{% url 'main:catalog_all' %}" hx-target="#main-content" hx-push-url="true" 
+           class="hover:text-black">ВСЕ ТОВАРЫ</a>
         <span class="mx-2">/</span>
         <a hx-get="{% url 'main:catalog' product.category.slug %}" hx-target="#main-content" hx-push-url="true"
            class="hover:text-black">{{ product.category.name|upper }}</a>

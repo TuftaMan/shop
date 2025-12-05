@@ -161,8 +161,10 @@ class ClearCartView(CartMixin, View):
         request.session.modified = True
 
         if request.headers.get('HX-Request'):
-            return TemplateResponse(request, 'cart/cart_empty.html', {
-                'cart': cart
+            # Теперь возвращаем полный cart_modal с пустой корзиной
+            return TemplateResponse(request, 'cart/cart_modal.html', {
+                'cart': cart,
+                'cart_items': []
             })
         return JsonResponse({
             'success': True,

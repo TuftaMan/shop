@@ -22,7 +22,7 @@
                 </button>
                 
                 <!-- Выпадающее меню -->
-                <div id="dropdown-menu" class="hidden absolute left-0 mt-2 w-40 bg-white shadow-lg border rounded-lg overflow-hidden">
+                <div id="dropdown-menu" class="hidden absolute left-0 mt-2 w-40 bg-white shadow-lg border rounded-lg overflow-hidden z-50">
                     <button hx-get="{% url 'main:catalog_all' %}" 
                             hx-target="#main-content" 
                             hx-push-url="true" 
@@ -86,48 +86,44 @@
 </footer>
 
 
-<script>
-// Функция инициализации меню
-function initMenu() {
-    const menuButton = document.getElementById("menu-button");
-    const dropdownMenu = document.getElementById("dropdown-menu");
-    
-    if (!menuButton || !dropdownMenu) return;
+<!-- Модальное окно корзины -->
+<div id="main-cart-modal" 
+     class="fixed top-16 right-0 bg-white w-96 max-h-[80vh] overflow-y-auto
+            shadow-2xl border border-gray-200 rounded-xl hidden z-50 transition-all duration-300">
+</div>
 
-    // Удаляем старые обработчики (если есть)
-    const newMenuButton = menuButton.cloneNode(true);
-    menuButton.parentNode.replaceChild(newMenuButton, menuButton);
-    
-    // Переопределяем переменные после клонирования
-    const btn = document.getElementById("menu-button");
-    const menu = document.getElementById("dropdown-menu");
-
-    // Открытие/закрытие меню
-    btn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        menu.classList.toggle("hidden");
-    });
-
-    // Закрытие меню по клику вне его
-    document.addEventListener("click", (e) => {
-        if (!btn.contains(e.target) && !menu.contains(e.target)) {
-            menu.classList.add("hidden");
-        }
-    });
-
-    // Закрытие меню после клика внутри
-    const menuItems = menu.querySelectorAll("button, a");
-    menuItems.forEach(item => {
-        item.addEventListener("click", () => {
-            menu.classList.add("hidden");
-        });
-    });
-}
-</script>
+<!-- Контейнер для уведомлений -->
+<div id="notification-container" class="fixed top-20 right-4 z-50 space-y-2"></div>
 
 
 <script>
-// script для корзины
+// ========== ВЫПАДАЮЩЕЕ МЕНЮ ==========
+const menuButton = document.getElementById("menu-button");
+const dropdownMenu = document.getElementById("dropdown-menu");
+
+// Открытие/закрытие меню
+menuButton.addEventListener("click", (e) => {
+    e.stopPropagation();
+    dropdownMenu.classList.toggle("hidden");
+});
+
+// Закрытие меню по клику вне его
+document.addEventListener("click", (e) => {
+    if (!menuButton.contains(e.target) && !dropdownMenu.contains(e.target)) {
+        dropdownMenu.classList.add("hidden");
+    }
+});
+
+// Закрытие меню после клика на пункт меню
+const menuItems = dropdownMenu.querySelectorAll("button, a");
+menuItems.forEach(item => {
+    item.addEventListener("click", () => {
+        dropdownMenu.classList.add("hidden");
+    });
+});
+
+
+// ========== КОРЗИНА ==========
 document.getElementById('cart-button').addEventListener('click', function() {
     const modal = document.getElementById('main-cart-modal');
     modal.classList.toggle('hidden');
@@ -151,7 +147,7 @@ document.body.addEventListener('htmx:afterRequest', (evt) => {
     }
 });
 
-// закрытие по клику вне
+// закрытие по клику вне корзины
 document.addEventListener("click", (e) => {
     const modal = document.getElementById("main-cart-modal");
     const cartBtn = document.getElementById("cart-button");
@@ -160,13 +156,46 @@ document.addEventListener("click", (e) => {
         modal.classList.add("hidden");
     }
 });
+
+
+// ========== УВЕДОМЛЕНИЯ ==========
+function showNotification(message, type = 'success') {
+    const container = document.getElementById('notification-container');
+    const notification = document.createElement('div');
+    
+    const bgColor = type === 'success' ? 'bg-green-500' : 'bg-red-500';
+    
+    notification.className = `${bgColor} text-white px-6 py-3 rounded-lg shadow-lg transform translate-x-full transition-transform duration-300 flex items-center gap-3`;
+    notification.innerHTML = `
+        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+        </svg>
+        <span>${message}</span>
+    `;
+    
+    container.appendChild(notification);
+    
+    // Показываем
+    setTimeout(() => {
+        notification.style.transform = 'translateX(0)';
+    }, 10);
+    
+    // Скрываем через 3 секунды
+    setTimeout(() => {
+        notification.style.transform = 'translateX(150%)';
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
+}
+
+// Показываем уведомление после добавления в корзину
+document.body.addEventListener('htmx:afterRequest', (evt) => {
+    if(evt.detail.xhr.responseURL.includes('/cart/add/')) {
+        if(evt.detail.successful) {
+            showNotification('Товар добавлен в корзину');
+        }
+    }
+});
 </script>
-
-
-<div id="main-cart-modal" 
-     class="fixed top-16 right-0 bg-white w-96 max-h-[80vh] overflow-y-auto
-            shadow-2xl border border-gray-200 rounded-xl hidden z-50 transition-all duration-300">
-</div>
 
 </body>
 </html>

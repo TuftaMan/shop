@@ -77,7 +77,16 @@ class AddToCartView(CartMixin, View):
         request.session.modified = True
 
         if request.headers.get('HX-Request'):
-            return redirect('cart:cart_modal')
+            return HttpResponse(f"""
+                <div class="p-3 bg-green-600 text-white rounded shadow mb-2">
+                    {product.name.capitalize()} добавлен в корзину
+                </div>
+                <script>
+                    setTimeout(() => {{
+                        document.querySelector('#notification-container div')?.remove();
+                    }}, 2500);
+                </script>
+            """)
         else:
             return JsonResponse({
                 'success': True,

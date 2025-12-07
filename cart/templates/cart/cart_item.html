@@ -1,0 +1,65 @@
+{% load static %}
+
+<div class="flex gap-4 pb-4 border-b" id="cart-item-{{ item.id }}">
+    <!-- Картинка товара -->
+    <div class="w-20 h-20 flex-shrink-0 bg-gray-100 overflow-hidden">
+        {% if item.product.main_image %}
+            <img src="{{ item.product.main_image.url }}" 
+                 alt="{{ item.product.name }}"
+                 class="w-full h-full object-cover">
+        {% else %}
+            <div class="w-full h-full flex items-center justify-center text-gray-400 text-xs">
+                No image
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Информация о товаре -->
+    <div class="flex-1 min-w-0">
+        <h3 class="font-medium text-sm mb-1 truncate">{{ item.product.name }}</h3>
+        {% if item.product.color %}
+        <p class="text-xs text-gray-500 mb-2">{{ item.product.color }}</p>
+        {% endif %}
+        
+        <!-- Управление количеством -->
+        <div class="flex items-center gap-2">
+            <form hx-post="{% url 'cart:update_item' item.id %}" 
+                  hx-target="#cart-item-{{ item.id }}"
+                  hx-swap="outerHTML"
+                  class="flex items-center gap-1">
+                {% csrf_token %}
+                
+                <button type="submit" 
+                        name="quantity" 
+                        value="{{ item.quantity|add:'-1' }}"
+                        class="w-6 h-6 flex items-center justify-center border border-gray-300 hover:bg-gray-100 text-sm">
+                    −
+                </button>
+                
+                <span class="w-8 text-center text-sm">{{ item.quantity }}</span>
+                
+                <button type="submit" 
+                        name="quantity" 
+                        value="{{ item.quantity|add:'1' }}"
+                        class="w-6 h-6 flex items-center justify-center border border-gray-300 hover:bg-gray-100 text-sm">
+                    +
+                </button>
+            </form>
+
+            <span class="text-sm font-medium ml-auto">{{ item.total_price }} ₽</span>
+        </div>
+    </div>
+
+    <!-- Кнопка удалить -->
+    <form hx-post="{% url 'cart:remove_item' item.id %}" 
+          hx-target="#cart-item-{{ item.id }}"
+          hx-swap="outerHTML swap:0.5s">
+        {% csrf_token %}
+        <button type="submit" 
+                class="text-gray-400 hover:text-red-500 flex-shrink-0">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+        </button>
+    </form>
+</div>

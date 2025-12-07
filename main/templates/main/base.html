@@ -78,19 +78,22 @@
 </main>
 
 
+<!-- Модальное окно корзины -->
+<div id="main-cart-modal" 
+     class="fixed top-16 right-0 bg-white w-96 max-h-[80vh] overflow-y-auto
+            shadow-2xl border border-gray-200 rounded-xl hidden z-50 transition-all duration-300">
+</div>
+
+
+<!-- КОНТЕЙНЕР ДЛЯ УВЕДОМЛЕНИЙ - ЭТО ВАЖНО! -->
+<div id="notification-container" class="fixed bottom-4 right-4 z-[9999] flex flex-col gap-2"></div>
+
 
 <footer class="bg-gray-100 py-8 mt-8">
     <div class="container mx-auto text-center text-white-700">
         <p>© 2025 Мой Магазин. Все права защищены.</p>
     </div>
 </footer>
-
-
-<!-- Модальное окно корзины -->
-<div id="main-cart-modal" 
-     class="fixed top-16 right-0 bg-white w-96 max-h-[80vh] overflow-y-auto
-            shadow-2xl border border-gray-200 rounded-xl hidden z-50 transition-all duration-300">
-</div>
 
 
 <script>
@@ -131,7 +134,21 @@ function updateCartCount() {
         .then(res => res.json())
         .then(data => {
             document.getElementById('cart-count').textContent = data.total_items;
-        });
+        })
+        .catch(err => console.error('Error updating cart count:', err));
+}
+
+function updateCartSummary() {
+    // Обновляем блок итогов после изменений в корзине
+    const summaryEl = document.getElementById('cart-summary');
+    if (!summaryEl) return; // Если элемента нет (корзина закрыта), выходим
+    
+    fetch("{% url 'cart:cart_summary' %}")
+        .then(res => res.text())
+        .then(html => {
+            summaryEl.outerHTML = html;
+        })
+        .catch(err => console.error('Error updating cart summary:', err));
 }
 
 // обновляем при загрузке страницы
@@ -139,8 +156,24 @@ updateCartCount();
 
 // обновляем после каждого HTMX запроса
 document.body.addEventListener('htmx:afterRequest', (evt) => {
-    if(evt.detail.xhr.responseURL.includes('/cart/')) {
+    const url = evt.detail.xhr.responseURL;
+    
+    // Обновляем счетчик для всех запросов к корзине
+    if (url && url.includes('/cart/')) {
         updateCartCount();
+        
+        // Обновляем итоги только для операций изменения/удаления
+        if (url.includes('update') || url.includes('remove')) {
+            setTimeout(() => updateCartSummary(), 100);
+        }
+    }
+});
+
+// Обработка уведомлений (для кнопки "Добавить в корзину")
+document.body.addEventListener('htmx:afterSwap', (evt) => {
+    // Если контент обновился в #main-content, скроллим наверх
+    if (evt.detail.target.id === 'main-content') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 });
 
@@ -151,19 +184,6 @@ document.addEventListener("click", (e) => {
 
     if (!modal.contains(e.target) && !cartBtn.contains(e.target)) {
         modal.classList.add("hidden");
-    }
-});
-</script>
-
-<!-- Контейнер для уведомлений -->
-<div id="notification-container" class="fixed bottom-4 right-4 z-[9999] flex flex-col gap-2"></div>
-
-
-<script>
-document.body.addEventListener('htmx:afterSwap', (evt) => {
-    // Если контент обновился в #main-content, скроллим наверх
-    if (evt.detail.target.id === 'main-content') {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 });
 </script>

@@ -100,15 +100,18 @@ class UpdateCartItemView(CartMixin, View):
     @transaction.atomic
     def post(self, request, item_id):
         cart = self.get_cart(request)
-        cart_item =get_object_or_404(CartItem, id=item_id, cart=cart)
+        cart_item = get_object_or_404(CartItem, id=item_id, cart=cart)
 
         quantity = int(request.POST.get('quantity', 1))
 
         if quantity < 0:
             return JsonResponse({'error': 'Invalid quantity'}, status=400)
         
+        # Если количество = 0, удаляем элемент
         if quantity == 0:
             cart_item.delete()
+            # Возвращаем пустую строку - элемент исчезнет со страницы
+            return HttpResponse('')
         else:
             if quantity > cart_item.product.stock:
                 return JsonResponse({
@@ -121,13 +124,11 @@ class UpdateCartItemView(CartMixin, View):
         request.session['cart_id'] = cart.id
         request.session.modified = True
 
+        # Возвращаем только обновленный элемент
         context = {
-            'cart': cart,
-            'cart_items': cart.items.select_related(
-                'product', 
-                ).order_by('-added_at')
+            'item': cart_item
         }
-        return TemplateResponse(request, 'cart/cart_modal.html', context)
+        return TemplateResponse(request, 'cart/cart_item.html', context)
     
 
 class RemoveCartItemView(CartMixin, View):
@@ -141,13 +142,9 @@ class RemoveCartItemView(CartMixin, View):
             request.session['cart_id'] = cart.id
             request.session.modified = True
 
-            context = {
-                'cart': cart,
-                'cart_items': cart.items.select_related(
-                    'product', 
-                ).order_by('-added_at')
-            }
-            return TemplateResponse(request, 'cart/cart_modal.html', context)
+            # Возвращаем пустую строку - элемент исчезнет
+            return HttpResponse('')
+            
         except CartItem.DoesNotExist:
             return JsonResponse({'error': 'Предмет не найден'}, status=400)
         
@@ -181,13 +178,10 @@ class ClearCartView(CartMixin, View):
         })
     
 
-class CartSummeryView(CartMixin, View):
+class CartSummaryView(CartMixin, View):
     def get(self, request):
         cart = self.get_cart(request)
         context = {
-            'cart': cart,
-            'cart_items': cart.items.select_related(
-                'product', 
-            ).order_by('-added_at')
+            'cart': cart
         }
         return TemplateResponse(request, 'cart/cart_summary.html', context)

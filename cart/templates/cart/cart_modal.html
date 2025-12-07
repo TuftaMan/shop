@@ -39,8 +39,8 @@
                     <!-- Управление количеством -->
                     <div class="flex items-center gap-2">
                         <form hx-post="{% url 'cart:update_item' item.id %}" 
-                              hx-target="#main-cart-modal" 
-                              hx-swap="innerHTML"
+                              hx-target="#cart-item-{{ item.id }}"
+                              hx-swap="outerHTML"
                               class="flex items-center gap-1">
                             {% csrf_token %}
                             
@@ -67,8 +67,8 @@
 
                 <!-- Кнопка удалить -->
                 <form hx-post="{% url 'cart:remove_item' item.id %}" 
-                      hx-target="#main-cart-modal" 
-                      hx-swap="innerHTML">
+                      hx-target="#cart-item-{{ item.id }}"
+                      hx-swap="outerHTML swap:1s">
                     {% csrf_token %}
                     <button type="submit" 
                             class="text-gray-400 hover:text-red-500 flex-shrink-0">
@@ -82,7 +82,7 @@
         </div>
 
         <!-- Итого -->
-        <div class="border-t pt-4 mb-4">
+        <div id="cart-summary" class="border-t pt-4 mb-4">
             <div class="flex justify-between items-center mb-2">
                 <span class="text-gray-600">Количество товаров:</span>
                 <span class="font-medium">{{ cart.total_items }}</span>

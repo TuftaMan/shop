@@ -42,21 +42,34 @@ class CustomUserCreationForm(UserCreationForm):
     
 
 class CustomUserLoginForm(AuthenticationForm):
-    username = forms.CharField(label="Email", widget=forms.TextInput(attrs={'class': 'dotted-input w-full py-3 text-sm font-medium text-gray-900 placeholder-gray-500', 'placeholder': 'EMAIL'}))
+    username = forms.CharField(
+        label="Email", 
+        widget=forms.TextInput(attrs={
+            'class': 'dotted-input w-full py-3 text-sm font-medium text-gray-900 placeholder-gray-500', 
+            'placeholder': 'EMAIL'
+        })
+    )
     password = forms.CharField(
         label="Password",
-        widget=forms.PasswordInput(attrs={'class': 'dotted-input w-full py-3 text-sm font-medium text-gray-900 placeholder-gray-500', 'placeholder': 'PASSWORD'})
+        widget=forms.PasswordInput(attrs={
+            'class': 'dotted-input w-full py-3 text-sm font-medium text-gray-900 placeholder-gray-500', 
+            'placeholder': 'PASSWORD'
+        })
     )
 
     def clean(self):
         email = self.cleaned_data.get('username')
         password = self.cleaned_data.get('password')
+        
         if email and password:
+            # Используем email вместо username
             self.user_cache = authenticate(self.request, email=email, password=password)
+            
             if self.user_cache is None:
                 raise forms.ValidationError('Неверный email или пароль')
-            elif not self.user_cache.is_active():
+            elif not self.user_cache.is_active:
                 raise forms.ValidationError('Аккаунт неактивен')
+        
         return self.cleaned_data
     
 
@@ -98,7 +111,7 @@ class CustomUserUpdateForm(forms.ModelForm):
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
-        if email and User.objects.filter(email=email).exclude(id=self.instance.id).exists:
+        if email and User.objects.filter(email=email).exclude(id=self.instance.id).exists():
             raise forms.ValidationError('Этот email уже используется')
         return email
     

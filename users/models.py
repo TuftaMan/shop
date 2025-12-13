@@ -38,7 +38,8 @@ class CustomUser(AbstractUser):
     postal_code = models.CharField(max_length=20, blank=True, null=True)
     phone = models.CharField(max_length=150, unique=True, null=True, blank=True)
     
-    username = CustomUserManager()
+    objects = CustomUserManager()
+    username = None  # ✅ Обязательно!
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']
@@ -47,8 +48,8 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return self.email
     
-    def clear(self):
-        for field in ['comany', 'address1', 'address2', 'city', 
+    def clean(self):
+        for field in ['company', 'address1', 'address2', 'city', 
                       'country', 'province', 'postal_code', 'phone']:
             value = getattr(self, field)
             if value:

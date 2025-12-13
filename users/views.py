@@ -14,8 +14,8 @@ def register(request):
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            login(request, user, backend='django.contrib.autg.backends.ModelBackend')
-            return redirect('main:index')
+            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+            return redirect('main:catalog_all')
     else:
         form = CustomUserCreationForm()
     return render(request, 'users/register.html', {'form': form})
@@ -26,11 +26,19 @@ def login_view(request):
         form = CustomUserLoginForm(request=request, data=request.POST)
         if form.is_valid():
             user = form.get_user()
-            login(request, user, backend='django.contrib.autg.backends.ModelBackend')
-            return redirect('main:index')
+            print(f"DEBUG: User to login: {user}")  # ✅ ДОБАВИТЬ
+            print(f"DEBUG: User authenticated: {user.is_authenticated}")  # ✅ ДОБАВИТЬ
+            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+            print(f"DEBUG: After login, is_authenticated: {request.user.is_authenticated}")  # ✅ ДОБАВИТЬ
+            return redirect('main:catalog_all')
         else:
-            form = CustomUserLoginForm()
-        return render(request, 'users/login.html', {'form': form})
+            print(f"DEBUG: Form errors: {form.errors}")  # ✅ ДОБАВИТЬ
+    else:
+        form = CustomUserLoginForm()
+
+    if request.headers.get('HX-Request'):
+        return render(request, 'users/login_content.html', {'form': form})
+    return render(request, 'users/login.html', {'form': form})
     
 
 @login_required(login_url='/users/login')
@@ -83,7 +91,7 @@ def update_account_details(request):
         else:
             return TemplateResponse(request, 'users/partials/edit_account_details.html', {'user': request.user, 'form': form})
     if request.headers.get('HX-Request'):
-        return HttpResponse(headers={'HX-Redirect': reverse('user:profile')})
+        return HttpResponse(headers={'HX-Redirect': reverse('users:profile')})
     return redirect('users:profile')
 
 

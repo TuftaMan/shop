@@ -47,24 +47,33 @@
         </div>
 
         <!-- ПРАВАЯ ЧАСТЬ — ИКОНКА КОРЗИНЫ -->
-        <div>
-            <button id="cart-button" 
-                    hx-get="{% url 'cart:cart_modal' %}" 
-                    hx-target="#main-cart-modal" 
+        <div class="flex items-center gap-4">
+            <!-- КОРЗИНА -->
+            <button id="cart-button"
+                    hx-get="{% url 'cart:cart_modal' %}"
+                    hx-target="#main-cart-modal"
                     hx-swap="innerHTML"
-                    class="relative">
-                <img src="{% static 'main/7784863.png' %}" alt="Корзина" class="h-8">
-                <span id="cart-count" class="absolute top-0 right-0 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
+                    class="relative flex items-center">
+                <img src="{% static 'main/7784863.png' %}"
+                    alt="Корзина"
+                    class="h-8 w-8">
+                <span id="cart-count"
+                    class="absolute -top-1 -right-1 bg-red-500 text-white
+                            rounded-full text-xs w-5 h-5 flex items-center justify-center">
                     0
                 </span>
             </button>
-            <a href="{% url 'users:profile' %}" 
-                hx-get="{% url 'users:profile' %}" 
-                hx-target="#main-content" 
-                hx-push-url="true"
-                class="text-sm font-medium text-gray-900 uppercase hover:text-gray-600 ml-4">
-                    ACCOUNT
-                </a>
+            <!-- АККАУНТ -->
+            <a href="{% url 'users:profile' %}"
+            hx-get="{% url 'users:profile' %}"
+            hx-target="#main-content"
+            hx-push-url="true"
+            class="flex items-center">
+                <img src="{% static 'main/account.webp' %}"
+                    alt="Аккаунт"
+                    class="h-8 w-8 cursor-pointer hover:opacity-80 transition">
+            </a>
+
         </div>
     </div>
 </header>

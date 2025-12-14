@@ -9,16 +9,16 @@ User = get_user_model()
 
 
 class CustomUserCreationForm(UserCreationForm):
-    email = forms.EmailField(required=True, max_length=254, widget=forms.EmailInput(attrs={'class': 'dotted-input w-full py-3 text-sm font-medium text-gray-900 placeholder-gray-500', 'placeholder': 'EMAIL'}))
-    first_name = forms.CharField(required=True, max_length=50, widget=forms.TextInput(attrs={'class': 'dotted-input w-full py-3 text-sm font-medium text-gray-900 placeholder-gray-500', 'placeholder': 'FIRST NAME'}))
-    last_name = forms.CharField(required=True, max_length=50, widget=forms.TextInput(attrs={'class': 'dotted-input w-full py-3 text-sm font-medium text-gray-900 placeholder-gray-500', 'placeholder': 'LAST NAME'}))
+    email = forms.EmailField(required=True, max_length=254, widget=forms.EmailInput(attrs={'class': 'dotted-input w-full py-3 text-sm font-medium text-gray-900 placeholder-gray-500', 'placeholder': 'ПОЧТА'}))
+    first_name = forms.CharField(required=True, max_length=50, widget=forms.TextInput(attrs={'class': 'dotted-input w-full py-3 text-sm font-medium text-gray-900 placeholder-gray-500', 'placeholder': 'ИМЯ'}))
+    last_name = forms.CharField(required=True, max_length=50, widget=forms.TextInput(attrs={'class': 'dotted-input w-full py-3 text-sm font-medium text-gray-900 placeholder-gray-500', 'placeholder': 'ФАМИЛИЯ'}))
     password1 = forms.CharField(
         required=True,
-        widget=forms.PasswordInput(attrs={'class': 'dotted-input w-full py-3 text-sm font-medium text-gray-900 placeholder-gray-500', 'placeholder': 'PASSWORD'})
+        widget=forms.PasswordInput(attrs={'class': 'dotted-input w-full py-3 text-sm font-medium text-gray-900 placeholder-gray-500', 'placeholder': 'ПАРОЛЬ'})
     )
     password2 = forms.CharField(
         required=True,
-        widget=forms.PasswordInput(attrs={'class': 'dotted-input w-full py-3 text-sm font-medium text-gray-900 placeholder-gray-500', 'placeholder': 'CONFIRM PASSWORD'})
+        widget=forms.PasswordInput(attrs={'class': 'dotted-input w-full py-3 text-sm font-medium text-gray-900 placeholder-gray-500', 'placeholder': 'ПОДТВЕРДИТЕ ПАРОЛЬ'})
     )
 
     class Meta:
@@ -46,14 +46,14 @@ class CustomUserLoginForm(AuthenticationForm):
         label="Email", 
         widget=forms.TextInput(attrs={
             'class': 'dotted-input w-full py-3 text-sm font-medium text-gray-900 placeholder-gray-500', 
-            'placeholder': 'EMAIL'
+            'placeholder': 'ПОЧТА'
         })
     )
     password = forms.CharField(
-        label="Password",
+        label="password",
         widget=forms.PasswordInput(attrs={
             'class': 'dotted-input w-full py-3 text-sm font-medium text-gray-900 placeholder-gray-500', 
-            'placeholder': 'PASSWORD'
+            'placeholder': 'ПАРОЛЬ'
         })
     )
 
@@ -77,21 +77,21 @@ class CustomUserUpdateForm(forms.ModelForm):
     phone = forms.CharField(
         required=False,
         validators=[RegexValidator(r'^\+?1?\d{9,15}$', "Enter a valid phone number.")],
-        widget=forms.TextInput(attrs={'class': 'dotted-input w-full py-3 text-sm font-medium text-gray-900 placeholder-gray-500', 'placeholder': 'PHONE NUMBER'})
+        widget=forms.TextInput(attrs={'class': 'dotted-input w-full py-3 text-sm font-medium text-gray-900 placeholder-gray-500', 'placeholder': 'НОМЕР ТЕЛЕФОНА'})
     )
     first_name = forms.CharField(
         required=True,
         max_length=50,
-        widget=forms.TextInput(attrs={'class': 'dotted-input w-full py-3 text-sm font-medium text-gray-900 placeholder-gray-500', 'placeholder': 'FIRST NAME'})
+        widget=forms.TextInput(attrs={'class': 'dotted-input w-full py-3 text-sm font-medium text-gray-900 placeholder-gray-500', 'placeholder': 'ИМЯ'})
     )
     last_name = forms.CharField(
         required=True,
         max_length=50,
-        widget=forms.TextInput(attrs={'class': 'dotted-input w-full py-3 text-sm font-medium text-gray-900 placeholder-gray-500', 'placeholder': 'LAST NAME'})
+        widget=forms.TextInput(attrs={'class': 'dotted-input w-full py-3 text-sm font-medium text-gray-900 placeholder-gray-500', 'placeholder': 'ФАМИЛИЯ'})
     )
     email = forms.EmailField(
         required=False,
-        widget=forms.EmailInput(attrs={'class': 'dotted-input w-full py-3 text-sm font-medium text-gray-900 placeholder-gray-500', 'placeholder': 'EMAIL'})
+        widget=forms.EmailInput(attrs={'class': 'dotted-input w-full py-3 text-sm font-medium text-gray-900 placeholder-gray-500', 'placeholder': 'ПОЧТА'})
     )
 
     class Meta:
@@ -100,13 +100,13 @@ class CustomUserUpdateForm(forms.ModelForm):
                   'address1', 'address2', 'city', 'country',
                   'province', 'postal_code', 'phone')
         widgets = {
-            'company': forms.TextInput(attrs={'class': 'dotted-input w-full py-3 text-sm font-medium text-gray-900 placeholder-gray-500', 'placeholder': 'COMPANY'}),
-            'address1': forms.TextInput(attrs={'class': 'dotted-input w-full py-3 text-sm font-medium text-gray-900 placeholder-gray-500', 'placeholder': 'ADDRESS LINE 1'}),
-            'address2': forms.TextInput(attrs={'class': 'dotted-input w-full py-3 text-sm font-medium text-gray-900 placeholder-gray-500', 'placeholder': 'ADDRESS LINE 2'}),
-            'city': forms.TextInput(attrs={'class': 'dotted-input w-full py-3 text-sm font-medium text-gray-900 placeholder-gray-500', 'placeholder': 'CITY'}),
-            'country': forms.TextInput(attrs={'class': 'dotted-input w-full py-3 text-sm font-medium text-gray-900 placeholder-gray-500', 'placeholder': 'COUNTRY'}),
-            'province': forms.TextInput(attrs={'class': 'dotted-input w-full py-3 text-sm font-medium text-gray-900 placeholder-gray-500', 'placeholder': 'PROVINCE'}),
-            'postal_code': forms.TextInput(attrs={'class': 'dotted-input w-full py-3 text-sm font-medium text-gray-900 placeholder-gray-500', 'placeholder': 'POSTAL CODE'}),
+            'company': forms.TextInput(attrs={'class': 'dotted-input w-full py-3 text-sm font-medium text-gray-900 placeholder-gray-500', 'placeholder': 'КОМПАНИЯ'}),
+            'address1': forms.TextInput(attrs={'class': 'dotted-input w-full py-3 text-sm font-medium text-gray-900 placeholder-gray-500', 'placeholder': 'АДРЕС 1'}),
+            'address2': forms.TextInput(attrs={'class': 'dotted-input w-full py-3 text-sm font-medium text-gray-900 placeholder-gray-500', 'placeholder': 'АДРЕС 2'}),
+            'country': forms.TextInput(attrs={'class': 'dotted-input w-full py-3 text-sm font-medium text-gray-900 placeholder-gray-500', 'placeholder': 'СТРАНА'}),
+            'city': forms.TextInput(attrs={'class': 'dotted-input w-full py-3 text-sm font-medium text-gray-900 placeholder-gray-500', 'placeholder': 'ГОРОД'}),
+            'province': forms.TextInput(attrs={'class': 'dotted-input w-full py-3 text-sm font-medium text-gray-900 placeholder-gray-500', 'placeholder': 'РЕГИОН'}),
+            'postal_code': forms.TextInput(attrs={'class': 'dotted-input w-full py-3 text-sm font-medium text-gray-900 placeholder-gray-500', 'placeholder': 'ИНДЕКС'}),
         }
 
     def clean_email(self):
@@ -119,7 +119,7 @@ class CustomUserUpdateForm(forms.ModelForm):
         cleaned_data = super().clean()
         if not cleaned_data.get('email'):
             cleaned_data['email'] = self.instance.email
-        for field in ['company', 'address1', 'address2', 'city', 'country',
+        for field in ['company', 'address1', 'address2', 'country', 'city'
                       'province', 'postal_code', 'phone']:
             if cleaned_data.get(field):
                 cleaned_data[field] = strip_tags(cleaned_data[field])

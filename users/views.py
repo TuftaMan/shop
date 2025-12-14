@@ -37,7 +37,7 @@ def login_view(request):
         form = CustomUserLoginForm()
 
     if request.headers.get('HX-Request'):
-        return render(request, 'users/login_content.html', {'form': form})
+        return render(request, 'users/login.html', {'form': form})
     return render(request, 'users/login.html', {'form': form})
     
 
@@ -47,19 +47,29 @@ def profile_view(request):
         form = CustomUserUpdateForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
+
             if request.headers.get('HX-Request'):
-                return HttpResponse(headers={'HX-Redirect': reverse('users:profile')})
+                return HttpResponse(headers={
+                    'HX-Redirect': reverse('users:profile')
+                })
+
             return redirect('users:profile')
     else:
         form = CustomUserUpdateForm(instance=request.user)
 
-    recomended_products = Product.objects.all().order_by('id')[:3]
+    recommended_products = Product.objects.all().order_by('id')[:3]
 
-    return TemplateResponse(request, 'users/profile.html', {
+    context = {
         'form': form,
         'user': request.user,
-        'recomended_products': recomended_products
-    })
+        'recommended_products': recommended_products
+    }
+
+    if request.headers.get('HX-Request'):
+        return TemplateResponse(request, 'users/profile_content.html', context)
+
+    return TemplateResponse(request, 'users/profile_page.html', context)
+
 
 
 @login_required(login_url='/users/login')

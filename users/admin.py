@@ -6,13 +6,13 @@ from .models import CustomUser
 class CustomUserAdmin(UserAdmin):
     list_display = ('email', 'first_name', 'last_name', 'country')
     list_filter = ('country',)
-    search_fields = ('email', 'first_name', 'last_name', 'company',
+    search_fields = ('email', 'first_name', 'last_name',
                      'city', 'country')
     ordering = ('email',)
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
         ('Personal Info', {
-            'fields': ('first_name', 'last_name', 'company', 'address1',
+            'fields': ('first_name', 'last_name', 'address1',
                        'address2', 'city', 'country', 'province', 'postal_code',
                        'phone')
         }),

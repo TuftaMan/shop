@@ -96,11 +96,10 @@ class CustomUserUpdateForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'email', 'company',
+        fields = ('first_name', 'last_name', 'email',
                   'address1', 'address2', 'city', 'country',
                   'province', 'postal_code', 'phone')
         widgets = {
-            'company': forms.TextInput(attrs={'class': 'dotted-input w-full py-3 text-sm font-medium text-gray-900 placeholder-gray-500', 'placeholder': 'КОМПАНИЯ'}),
             'address1': forms.TextInput(attrs={'class': 'dotted-input w-full py-3 text-sm font-medium text-gray-900 placeholder-gray-500', 'placeholder': 'АДРЕС 1'}),
             'address2': forms.TextInput(attrs={'class': 'dotted-input w-full py-3 text-sm font-medium text-gray-900 placeholder-gray-500', 'placeholder': 'АДРЕС 2'}),
             'country': forms.TextInput(attrs={'class': 'dotted-input w-full py-3 text-sm font-medium text-gray-900 placeholder-gray-500', 'placeholder': 'СТРАНА'}),
@@ -119,7 +118,7 @@ class CustomUserUpdateForm(forms.ModelForm):
         cleaned_data = super().clean()
         if not cleaned_data.get('email'):
             cleaned_data['email'] = self.instance.email
-        for field in ['company', 'address1', 'address2', 'country', 'city'
+        for field in [ 'address1', 'address2', 'country', 'city'
                       'province', 'postal_code', 'phone']:
             if cleaned_data.get(field):
                 cleaned_data[field] = strip_tags(cleaned_data[field])

@@ -50,10 +50,11 @@
         <div class="flex items-center gap-4">
             <!-- КОРЗИНА -->
             <button id="cart-button"
-                    hx-get="{% url 'cart:cart_modal' %}"
-                    hx-target="#main-cart-modal"
-                    hx-swap="innerHTML"
-                    class="relative flex items-center">
+                hx-get="{% url 'cart:cart_modal' %}"
+                hx-target="#main-cart-modal"
+                hx-swap="innerHTML"
+                onclick="event.stopPropagation()"
+                class="relative flex items-center">
                 <img src="{% static 'main/7784863.png' %}"
                     alt="Корзина"
                     class="h-8 w-8">
@@ -139,10 +140,11 @@ menuItems.forEach(item => {
 });
 
 
-// ========== КОРЗИНА ==========
-document.getElementById('cart-button').addEventListener('click', function() {
-    const modal = document.getElementById('main-cart-modal');
-    modal.classList.toggle('hidden');
+document.body.addEventListener('htmx:afterSwap', function (evt) {
+    if (evt.detail.target.id === 'main-cart-modal') {
+        const modal = document.getElementById('main-cart-modal');
+        modal.classList.remove('hidden');
+    }
 });
 
 function updateCartCount() {

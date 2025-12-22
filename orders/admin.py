@@ -29,35 +29,69 @@ class OrderItemInline(admin.TabularInline):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'email', 
-                    'total_price', 'payment_provider',
-                    'status', 'created_at', 'updated_at')
-    list_filter = ('status', 'first_name', 'last_name')
+    list_display = (
+        'id',
+        'user',
+        'email',
+        'total_price',
+        'status',
+        'created_at',
+    )
+
+    list_filter = ('status',)
     search_fields = ('email', 'first_name', 'last_name')
     date_hierarchy = 'created_at'
-    readonly_fields = ('created_at', 'updated_at', 'total_price', 'stripe_payment_intend_id')
+
+    readonly_fields = (
+        'created_at',
+        'total_price',
+    )
+
     inlines = [OrderItemInline]
 
     fieldsets = (
         ('Order Information', {
-            'fields': ('user', 'first_name', 'last_name', 'email',
-                       'address1', 'address2', 'country', 'city',
-                       'province', 'postal_code', 'phone', 
-                       'special_instructions', 'total_price')
+            'fields': (
+                'user',
+                'first_name',
+                'last_name',
+                'email',
+                'phone',
+                'total_price',
+            )
         }),
-        ('Payment and Status', {
-            'fields': ('status', 'payment_provider', 'stripe_payment_intend_id',)
+        ('Delivery', {
+            'fields': (
+                'address1',
+                'address2',
+                'country',
+                'city',
+                'province',
+                'postal_code',
+            )
+        }),
+        ('Status', {
+            'fields': ('status',),
         }),
         ('Timestamps', {
-            'fields': ('created_at', 'updated_at'),
-            'classes': ('collapse',)
+            'fields': ('created_at',),
+            'classes': ('collapse',),
         }),
     )
 
-
     def get_readonly_fields(self, request, obj=None):
         if obj:
-            return self.readonly_fields + ('user', 'first_name', 'last_name', 'email',
-                                            'address1', 'address2', 'country', 'city',
-                                            'province', 'postal_code', 'phone')
+            return self.readonly_fields + (
+                'user',
+                'first_name',
+                'last_name',
+                'email',
+                'phone',
+                'address1',
+                'address2',
+                'country',
+                'city',
+                'province',
+                'postal_code',
+            )
         return self.readonly_fields

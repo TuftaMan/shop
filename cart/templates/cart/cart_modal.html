@@ -95,7 +95,13 @@
 
         <!-- Кнопки действий -->
         <div class="space-y-2">
-            <button class="w-full bg-black text-white py-3 text-sm font-medium hover:bg-gray-800 transition">
+            <button
+                hx-get="{% url 'orders:checkout' %}"
+                hx-target="#main-content"
+                hx-push-url="true"
+                hx-on="click: document.getElementById('main-cart-modal').classList.add('hidden')"
+                class="w-full bg-black text-white py-3 text-sm font-medium hover:bg-gray-800 transition"
+            >
                 ОФОРМИТЬ ЗАКАЗ
             </button>
             

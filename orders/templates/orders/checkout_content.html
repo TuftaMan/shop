@@ -1,0 +1,82 @@
+<form
+    method="post"
+    class="max-w-6xl mx-auto px-4 py-12 grid grid-cols-1 lg:grid-cols-3 gap-10"
+>
+    {% csrf_token %}
+
+    <!-- ЛЕВАЯ ЧАСТЬ -->
+    <div class="lg:col-span-2 space-y-10">
+
+        <h1 class="text-3xl font-bold text-black">
+            Оформление заказа
+        </h1>
+
+        <!-- Контакты -->
+        <section class="space-y-6">
+            <h2 class="text-xl font-semibold">Контактные данные</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {{ form.first_name }}
+                {{ form.last_name }}
+            </div>
+
+            {{ form.email }}
+            {{ form.phone }}
+        </section>
+
+        <!-- Адрес -->
+        <section class="space-y-6">
+            <h2 class="text-xl font-semibold">Адрес доставки</h2>
+
+            {{ form.address1 }}
+            {{ form.address2 }}
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {{ form.city }}
+                {{ form.province }}
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {{ form.country }}
+                {{ form.postal_code }}
+            </div>
+        </section>
+
+        <!-- Submit -->
+        <button
+            type="submit"
+            class="w-full md:w-auto px-12 py-4 bg-black text-white text-lg font-medium
+                   hover:bg-gray-900 transition disabled:opacity-50"
+        >
+            Оформить заказ
+        </button>
+    </div>
+
+    <!-- ПРАВАЯ ЧАСТЬ -->
+    <aside class="bg-gray-50 p-6 space-y-6 border border-gray-200 h-fit">
+        <h2 class="text-xl font-semibold">Ваш заказ</h2>
+
+        <div class="space-y-4">
+            {% for item in cart_items %}
+                <div class="flex justify-between text-sm">
+                    <div>
+                        <p class="font-medium">{{ item.product.name }}</p>
+                        <p class="text-gray-500">× {{ item.quantity }}</p>
+                    </div>
+                    <div class="font-medium">
+                        {{ item.get_total_price }} ₽
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="border-t pt-4 flex justify-between text-lg font-semibold">
+            <span>Итого</span>
+            <span>{{ total_price }} ₽</span>
+        </div>
+
+        <p class="text-sm text-gray-500">
+            После оформления заказа мы свяжемся с вами для подтверждения.
+        </p>
+    </aside>
+</form>

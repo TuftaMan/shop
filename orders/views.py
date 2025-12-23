@@ -14,7 +14,6 @@ from django.db import transaction
 from .utils import send_telegram_order_notification
 
 
-@method_decorator(login_required(login_url='users/login'), name='dispatch')
 class CheckoutView(CartMixin, View):
     def get(self, request):
         cart = self.get_cart(request)
@@ -38,7 +37,6 @@ class CheckoutView(CartMixin, View):
             return TemplateResponse(request, 'orders/checkout_content.html', context)
         return render(request, 'orders/checkout.html', context)
     
-    @method_decorator(login_required(login_url='users/login'), name='dispatch')
     @transaction.atomic
     def post(self, request):
         cart = self.get_cart(request)
@@ -57,10 +55,10 @@ class CheckoutView(CartMixin, View):
             })
 
         order = Order.objects.create(
-            user=request.user,
+            user=request.user if request.user.is_authenticated else None,
             first_name=form.cleaned_data['first_name'],
             last_name=form.cleaned_data['last_name'],
-            email=request.user.email,
+            email=form.cleaned_data['email'],
             address1=form.cleaned_data['address1'],
             address2=form.cleaned_data['address2'],
             city=form.cleaned_data['city'],

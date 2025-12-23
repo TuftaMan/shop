@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.http import HttpResponse
 from django.template.response import TemplateResponse
-from django.views.generic import View
+from django.views.generic import View, TemplateView
 from .forms import OrderForm
 from .models import Order, OrderItem
 from cart.views import CartMixin
@@ -82,3 +82,6 @@ class CheckoutView(CartMixin, View):
         send_telegram_order_notification(order)
 
         return redirect('orders:success')
+    
+class OrderSuccessView(TemplateView):
+    template_name = 'orders/success.html'

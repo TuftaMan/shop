@@ -10,15 +10,20 @@ from django.contrib import messages
 from main.models import Product
 
 def register(request):
-    if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
-            return redirect('main:catalog_all')
-    else:
-        form = CustomUserCreationForm()
-    return render(request, 'users/register.html', {'form': form})
+    form = CustomUserCreationForm(request.POST or None)
+
+    if request.method == 'POST' and form.is_valid():
+        user = form.save()
+        login(request, user)
+        return redirect('main:catalog_all')
+
+    template = (
+        'users/register_content.html'
+        if request.headers.get('HX-Request')
+        else 'users/register.html'
+    )
+
+    return render(request, template, {'form': form})
 
 
 def login_view(request):
@@ -26,19 +31,19 @@ def login_view(request):
         form = CustomUserLoginForm(request=request, data=request.POST)
         if form.is_valid():
             user = form.get_user()
-            print(f"DEBUG: User to login: {user}")  # ✅ ДОБАВИТЬ
-            print(f"DEBUG: User authenticated: {user.is_authenticated}")  # ✅ ДОБАВИТЬ
-            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
-            print(f"DEBUG: After login, is_authenticated: {request.user.is_authenticated}")  # ✅ ДОБАВИТЬ
+            login(request, user)
             return redirect('main:catalog_all')
-        else:
-            print(f"DEBUG: Form errors: {form.errors}")  # ✅ ДОБАВИТЬ
     else:
         form = CustomUserLoginForm()
 
+    context = {'form': form}
+
+    # 🔥 HTMX → partial
     if request.headers.get('HX-Request'):
-        return render(request, 'users/login.html', {'form': form})
-    return render(request, 'users/login.html', {'form': form})
+        return render(request, 'users/login_content.html', context)
+
+    # 🔥 обычный запрос / F5 → full page
+    return render(request, 'users/login.html', context)
     
 
 @login_required(login_url='/users/login')

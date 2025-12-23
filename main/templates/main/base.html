@@ -9,7 +9,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
 </head>
-<body class="bg-white">
+<body class="bg-white min-h-screen flex flex-col">
 
 <header class="sticky top-0 bg-white shadow z-50">
     <div class="container mx-auto flex justify-between items-center p-4">
@@ -81,7 +81,7 @@
 
 
 <!-- ОСНОВНОЙ КОНТЕЙНЕР HTMX -->
-<main id="main-content">
+<main id="main-content" class="flex-grow min-h-[103vh]">
     {% block main_content %}
     <!-- Главная большая картинка -->
     <a
@@ -106,7 +106,7 @@
 <div id="notification-container" class="fixed bottom-4 right-4 z-[9999] flex flex-col gap-2"></div>
 
 
-<footer class="bg-gray-100 py-8 mt-8">
+<footer class="bg-gray-100 py-8">
     <div class="container mx-auto text-center text-white-700">
         <p>© 2025 Мой Магазин. Все права защищены.</p>
     </div>

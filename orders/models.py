@@ -11,6 +11,13 @@ class Order(models.Model):
         ('cancelled', 'Отменён'),
     )
 
+    order_number = models.CharField(
+        max_length=20,
+        unique=True,
+        editable=False,
+        blank=True
+    )
+
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
@@ -58,3 +65,11 @@ class OrderItem(models.Model):
     
     def get_total_price(self):
         return self.price * self.quantity
+
+
+class OrderCounter(models.Model):
+    year = models.PositiveIntegerField(unique=True)
+    last_number = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return f'{self.year}: {self.last_number}'

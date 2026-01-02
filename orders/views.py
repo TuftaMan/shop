@@ -11,7 +11,7 @@ from cart.views import CartMixin
 from django.shortcuts import get_object_or_404
 from decimal import Decimal
 from django.db import transaction
-from .utils import send_telegram_order_notification
+from .utils import send_telegram_order_notification, generate_order_number
 
 
 class CheckoutView(CartMixin, View):
@@ -55,6 +55,7 @@ class CheckoutView(CartMixin, View):
             })
 
         order = Order.objects.create(
+            order_number=generate_order_number(),
             user=request.user if request.user.is_authenticated else None,
             first_name=form.cleaned_data['first_name'],
             last_name=form.cleaned_data['last_name'],
@@ -85,3 +86,18 @@ class CheckoutView(CartMixin, View):
     
 class OrderSuccessView(TemplateView):
     template_name = 'orders/success.html'
+
+
+@login_required(login_url='users:login')
+def order_history(request):
+    orders = (
+        Order.objects.filter(user=request.user).order_by('-created_at')
+    )
+    context = {
+        'orders': orders
+    }
+
+    if request.headers.get('HX-Request'):
+        return render(request, 'orders/order_history_content.html', context)
+    
+    return render(request, 'orders/order_history.html', context)

@@ -1,5 +1,8 @@
 import requests
 from django.conf import settings
+from django.db import transaction
+from django.utils import timezone
+from .models import OrderCounter
 
 
 def send_telegram_order_notification(order):
@@ -7,6 +10,7 @@ def send_telegram_order_notification(order):
         "🛒 *Новый заказ!*",
         "",
         f"🆔 Заказ №{order.id}",
+        f"🆔 Номер заказа №{order.order_number}",
         f"👤 Имя: {order.first_name} {order.last_name}",
         f"📧 Email: {order.email}",
         f"📞 Телефон: {order.phone or '—'}",
@@ -39,3 +43,17 @@ def send_telegram_order_notification(order):
     except Exception:
         # ❗️Никогда не ломаем заказ из-за Telegram
         pass
+
+
+def generate_order_number(prefix='DW'):
+    year = timezone.now().year
+
+    with transaction.atomic():
+        counter, _ = OrderCounter.objects.select_for_update().get_or_create(
+            year=year
+        )
+        counter.last_number += 1
+        counter.save()
+
+        number = f'{prefix}-{year}-{counter.last_number:06d}'
+        return number

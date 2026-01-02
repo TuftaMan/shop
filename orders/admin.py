@@ -14,7 +14,7 @@ class OrderItemInline(admin.TabularInline):
 
     def image_preview(self, obj):
         if obj.product.main_image:
-            return mark_safe(f'<img src="{obj.product.main_image.url}" style="max-heigh: 100px; "max-width: 100px; object-fit: cover;" />')
+            return mark_safe(f'<img src="{obj.product.main_image.url}" style="max-height: 100px; "max-width: 100px; object-fit: cover;" />')
         return mark_safe('<span style="color: gray;"> No image</span>')
     image_preview.short_description = 'Image'
 
@@ -31,6 +31,7 @@ class OrderItemInline(admin.TabularInline):
 class OrderAdmin(admin.ModelAdmin):
     list_display = (
         'id',
+        'order_number',
         'user',
         'email',
         'total_price',
@@ -39,12 +40,13 @@ class OrderAdmin(admin.ModelAdmin):
     )
 
     list_filter = ('status',)
-    search_fields = ('email', 'first_name', 'last_name')
+    search_fields = ('email', 'first_name', 'last_name', 'order_number')
     date_hierarchy = 'created_at'
 
     readonly_fields = (
         'created_at',
         'total_price',
+        'order_number',
     )
 
     inlines = [OrderItemInline]
@@ -58,6 +60,7 @@ class OrderAdmin(admin.ModelAdmin):
                 'email',
                 'phone',
                 'total_price',
+                'order_number',
             )
         }),
         ('Delivery', {

@@ -50,11 +50,8 @@
         <div class="flex items-center gap-4">
             <!-- КОРЗИНА -->
             <button id="cart-button"
-                hx-get="{% url 'cart:cart_modal' %}"
-                hx-target="#main-cart-modal"
-                hx-swap="innerHTML"
-                onclick="event.stopPropagation()"
-                class="relative flex items-center">
+            type="button"
+            class="relative flex items-center">
                 <img src="{% static 'main/7784863.png' %}"
                     alt="Корзина"
                     class="h-8 w-8">
@@ -204,6 +201,26 @@ document.addEventListener("click", (e) => {
         modal.classList.add("hidden");
     }
 });
+
+const cartButton = document.getElementById('cart-button');
+const cartModal = document.getElementById('main-cart-modal');
+
+cartButton.addEventListener('click', function (e) {
+    e.stopPropagation();
+
+    // если корзина уже открыта — закрываем
+    if (!cartModal.classList.contains('hidden')) {
+        cartModal.classList.add('hidden');
+        return;
+    }
+
+    // если корзина закрыта — загружаем и открываем
+    htmx.ajax('GET', "{% url 'cart:cart_modal' %}", {
+        target: '#main-cart-modal',
+        swap: 'innerHTML'
+    });
+});
+
 </script>
 
 </body>

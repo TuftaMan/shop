@@ -1,0 +1,34 @@
+<div class="max-w-4xl mx-auto px-4 py-12 space-y-6">
+
+    <h1 class="text-3xl font-bold">История заказов</h1>
+
+    {% if orders %}
+        {% for order in orders %}
+            <div class="border rounded-lg p-4 space-y-2">
+                <div class="flex justify-between">
+                    <span class="font-semibold">
+                        {% if order.order_number %}
+                            Заказ №{{ order.order_number }}
+                        {% else %}
+                            Заказ в обработке
+                        {% endif %}
+                    </span>
+                    <span class="text-sm text-gray-500">
+                        {{ order.created_at|date:"d.m.Y H:i" }}
+                    </span>
+                </div>
+
+                <div class="text-sm text-gray-600">
+                    Сумма: {{ order.total_price }} ₽
+                </div>
+
+                <div class="text-sm">
+                    Статус: <strong>{{ order.get_status_display }}</strong>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="text-gray-500">У вас пока нет заказов</p>
+    {% endif %}
+
+</div>

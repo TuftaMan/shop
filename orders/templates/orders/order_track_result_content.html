@@ -1,0 +1,29 @@
+<div class="max-w-md mx-auto py-20">
+    <h1 class="text-2xl font-bold mb-6">
+        Заказ {{ order.order_number }}
+    </h1>
+
+    <p class="mb-2">
+        Статус:
+        <strong>{{ order.get_status_display }}</strong>
+    </p>
+
+    <p class="mb-2">
+        Дата:
+        {{ order.created_at|date:"d.m.Y" }}
+    </p>
+
+    <p class="mb-6">
+        Сумма:
+        {{ order.total_price }} ₽
+    </p>
+
+    <a
+        hx-get="{% url 'orders:order_track' %}"
+        hx-target="#main-content"
+        hx-push-url="true"
+        class="inline-block mt-6 text-sm underline"
+    >
+        Проверить другой заказ
+    </a>
+</div>

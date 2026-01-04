@@ -18,7 +18,7 @@
             <!-- Кнопка меню -->
             <div class="relative">
                 <button id="menu-button" class="flex items-center">
-                    <img src="{% static 'main/three-line-horizontal.svg' %}" alt="Меню" class="h-10 cursor-pointer">
+                    <img src="{% static 'main/burger.svg' %}" alt="Меню" class="h-10 cursor-pointer">
                 </button>
                 
                 <!-- Выпадающее меню -->
@@ -35,12 +35,19 @@
                             class="w-full text-left px-4 py-2 hover:bg-gray-100">
                         О нас
                     </button>
+                    <button href="{% url 'orders:order_track' %}"
+                            hx-get="{% url 'orders:order_track' %}" 
+                            hx-target="#main-content" 
+                            hx-push-url="true" 
+                            class="w-full text-left px-4 py-2 hover:bg-gray-100">
+                        Статус заказа
+                    </button>
                 </div>
             </div>
             <!-- ЛОГОТИП (переход на главную) -->
             <a href="{% url 'main:index' %}"
                 class="flex items-center">
-                <img src="{% static 'main/DRIFT.png' %}" 
+                <img src="{% static 'main/logo.png' %}" 
                     alt="DriftWood" 
                     class="h-7 cursor-pointer hover:opacity-80 transition">
             </a>
@@ -52,7 +59,7 @@
             <button id="cart-button"
             type="button"
             class="relative flex items-center">
-                <img src="{% static 'main/7784863.png' %}"
+                <img src="{% static 'main/cart.png' %}"
                     alt="Корзина"
                     class="h-8 w-8">
                 <span id="cart-count"
@@ -67,7 +74,7 @@
             hx-target="#main-content"
             hx-push-url="true"
             class="flex items-center">
-                <img src="{% static 'main/account.webp' %}"
+                <img src="{% static 'main/account.png' %}"
                     alt="Аккаунт"
                     class="h-8 w-8 cursor-pointer hover:opacity-80 transition">
             </a>
@@ -86,7 +93,7 @@
         hx-target="#main-content"
         hx-push-url="true"
     >
-        <img src="{% static 'main/1.png' %}" alt="Главная" class="w-full h-screen object-cover cursor-pointer">
+        <img src="{% static 'main/main.png' %}" alt="Главная" class="w-full h-screen object-cover cursor-pointer">
     </a>
     {% endblock %}
 </main>

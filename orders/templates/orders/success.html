@@ -8,6 +8,12 @@
     <p class="text-gray-600 mb-6">
         Мы получили ваш заказ и свяжемся с вами в ближайшее время.
     </p>
+    <p class="text-gray-600 mb-6">
+        Номер вашего заказа —
+    <span class="font-semibold text-black">
+        {{ order_number }}
+    </span>
+    </p>
 
     <a
         href="{% url 'main:catalog_all' %}"

@@ -33,10 +33,10 @@ DEBUG = True
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'driftwoodbrand.ru', 'www.driftwoodbrand.ru']
 
 CSRF_TRUSTED_ORIGINS = [
-    'http://127.0.0.1:8000'
-    'http://localhost:8000'
-    'http://driftwoodbrand.ru'
-    'http://www.driftwoodbrand.ru'
+    'http://127.0.0.1:8000',
+    'http://localhost:8000',
+    'http://driftwoodbrand.ru',
+    'http://www.driftwoodbrand.ru',
 ]
 
 CSRF_COOKIE_SECURE = True 

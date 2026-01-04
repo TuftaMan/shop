@@ -82,10 +82,15 @@ class CheckoutView(CartMixin, View):
 
         send_telegram_order_notification(order)
 
-        return redirect('orders:success')
+        return redirect('orders:success', order_number=order.order_number)
     
 class OrderSuccessView(TemplateView):
     template_name = 'orders/success.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['order_number'] = self.kwargs['order_number']
+        return context
 
 
 @login_required(login_url='users:login')
@@ -101,3 +106,32 @@ def order_history(request):
         return render(request, 'orders/order_history_content.html', context)
     
     return render(request, 'orders/order_history.html', context)
+
+
+def order_track(request):
+    template = (
+        'orders/order_track_content.html'
+        if request.headers.get('HX-Request')
+        else 'orders/order_track.html'
+    )
+    return render(request, template)
+
+
+def order_track_result(request):
+    order_number = request.GET.get('order_number')
+    order = Order.objects.filter(order_number=order_number).first()
+
+    template = (
+        'orders/order_track_result_content.html'
+        if request.headers.get('HX-Request')
+        else 'orders/order_track_result.html'
+    )
+
+    if not order:
+        return render(request, 'orders/order_track_content.html', {
+            'error': 'Заказ с таким номером не найден'
+        })
+
+    return render(request, template, {
+        'order': order
+    })

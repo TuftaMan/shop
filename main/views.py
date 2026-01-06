@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from django.template.response import TemplateResponse
 from .models import Category, Product
 from django.db.models import Q
+from django.shortcuts import render
 
 
 class IndexView(TemplateView):
@@ -116,3 +117,11 @@ class ProductDetailView(DetailView):
 
 class AboutView(TemplateView):
     template_name = 'main/about.html'
+
+    def get(self, request, *args, **kwargs):
+        # Если запрос пришёл от HTMX — отдаём ТОЛЬКО КОНТЕНТ
+        if request.headers.get('HX-Request') == 'true':
+            return render(request, 'main/about_content.html')
+
+        # Обычный запрос (F5, прямой переход)
+        return super().get(request, *args, **kwargs)

@@ -32,17 +32,19 @@ def send_telegram_order_notification(order):
 
     url = f"https://api.telegram.org/bot{settings.TELEGRAM_BOT_TOKEN}/sendMessage"
 
-    payload = {
-        "chat_id": settings.TELEGRAM_CHAT_ID,
-        "text": message,
-        "parse_mode": "Markdown",
-    }
+    for chat in settings.TELEGRAM_CHAT_IDS:
 
-    try:
-        requests.post(url, json=payload, timeout=5)
-    except Exception:
-        # ❗️Никогда не ломаем заказ из-за Telegram
-        pass
+        payload = {
+            "chat_id": chat,
+            "text": message,
+            "parse_mode": "Markdown",
+        }
+
+        try:
+            requests.post(url, json=payload, timeout=5)
+        except Exception:
+            # ❗️Никогда не ломаем заказ из-за Telegram
+            pass
 
 
 def generate_order_number(prefix='DW'):
@@ -55,5 +57,5 @@ def generate_order_number(prefix='DW'):
         counter.last_number += 1
         counter.save()
 
-        number = f'{prefix}-{year}-{counter.last_number:06d}'
+        number = f'{prefix}-{year}-{counter.last_number:04d}'
         return number

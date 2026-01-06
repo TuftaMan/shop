@@ -1,67 +1,7 @@
-{% load static %}
+{% extends "main/base.html" %}
 
-<div class="container mx-auto px-4 py-12 max-w-4xl">
+{% block title %}about{% endblock %}
 
-    <!-- Заголовок -->
-    <h1 class="text-3xl font-bold mb-6">О нас</h1>
-
-    <!-- Основной текст -->
-    <p class="text-gray-700 leading-relaxed mb-6">
-        Добро пожаловать в наш магазин! Здесь мы собираем лучшие товары, которые создаются
-        с вниманием к деталям и любовью к своему делу. Мы стремимся делать покупки простыми,
-        приятными и честными — без лишнего шума и маркетинговой ерунды.
-    </p>
-
-    <p class="text-gray-700 leading-relaxed mb-6">
-        Каждый продукт проходит тщательный отбор, а описание составляется так, чтобы вы точно
-        понимали, что покупаете. Мы ценим время наших клиентов и хотим, чтобы вы возвращались к нам
-        снова — потому что вам нравится качество товаров и удобство сервиса.
-    </p>
-
-    <!-- Блок с преимуществами -->
-    <div class="grid sm:grid-cols-2 gap-8 my-10">
-
-        <div class="p-6 border rounded-xl shadow-sm">
-            <h3 class="text-lg font-semibold mb-2">Качество</h3>
-            <p class="text-gray-700 text-sm leading-relaxed">
-                Мы выбираем только те товары, в которых уверены. Качество — не просто слово,
-                а главный принцип нашей работы.
-            </p>
-        </div>
-
-        <div class="p-6 border rounded-xl shadow-sm">
-            <h3 class="text-lg font-semibold mb-2">Надёжность</h3>
-            <p class="text-gray-700 text-sm leading-relaxed">
-                Поддержка всегда под рукой, а каждый заказ обрабатывается быстро
-                и аккуратно — без задержек и сюрпризов.
-            </p>
-        </div>
-
-        <div class="p-6 border rounded-xl shadow-sm">
-            <h3 class="text-lg font-semibold mb-2">Прозрачность</h3>
-            <p class="text-gray-700 text-sm leading-relaxed">
-                Мы честно описываем товары и не скрываем важную информацию.
-            </p>
-        </div>
-
-        <div class="p-6 border rounded-xl shadow-sm">
-            <h3 class="text-lg font-semibold mb-2">Комфорт</h3>
-            <p class="text-gray-700 text-sm leading-relaxed">
-                Простая навигация, удобный каталог и приятный интерфейс — чтобы shopping не раздражал.
-            </p>
-        </div>
-    </div>
-
-    <!-- Контактная информация -->
-    <div class="mt-12 border-t pt-8">
-        <h2 class="text-2xl font-bold mb-4">Контакты</h2>
-
-        <p class="text-gray-700 mb-2">
-            Если у вас есть вопросы — мы всегда на связи.
-        </p>
-
-        <p class="text-gray-700"><strong>Email:</strong> awerk1n2000@mail.ru</p>
-        <p class="text-gray-700"><strong>Telegram:</strong> @ToxicMaaan</p>
-    </div>
-
-</div>
+{% block main_content %}
+    {% include "main/about_content.html" %}
+{% endblock %}

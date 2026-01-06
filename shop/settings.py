@@ -33,14 +33,15 @@ DEBUG = True
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'driftwoodbrand.ru', 'www.driftwoodbrand.ru']
 
 CSRF_TRUSTED_ORIGINS = [
-    'http://127.0.0.1:8000',
-    'http://localhost:8000',
-    'http://driftwoodbrand.ru',
-    'http://www.driftwoodbrand.ru',
+    'https://driftwoodbrand.ru',
+    'https://www.driftwoodbrand.ru',
 ]
 
 CSRF_COOKIE_SECURE = True 
 SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_HTTPONLY = False
+CSRF_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_SAMESITE = 'Lax'
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = 'DENY'
@@ -155,10 +156,17 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-SESSION_COOCKIE_AGE = 86400
+SESSION_COOKIE_AGE = 86400
 SESSION_SAVE_EVERY_REQUEST = True
 
 AUTH_USER_MODEL = 'users.CustomUser'
 
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
-TELEGRAM_CHAT_ID = os.getenv('TELEGRAM_CHAT_ID')
+TELEGRAM_CHAT_IDS = list(
+    map(
+        int,
+        os.getenv("TELEGRAM_CHAT_IDS", "").split(",")
+    )
+)

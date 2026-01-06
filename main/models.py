@@ -22,7 +22,7 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.TextField(blank=True)
     main_image = models.ImageField(upload_to='products/main/')
-    stock = models.PositiveIntegerField(default=1)
+    stock = models.PositiveIntegerField(default=99)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

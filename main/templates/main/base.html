@@ -4,11 +4,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}DriftWood{% endblock %}</title>
+
+    <title>{% block title %}DriftWood | Авторские изделия ручной работы{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}
+    DriftWood — интернет-магазин авторских изделий из дерева ручной работы.
+    {% endblock %}">
+
+    <meta property="og:title" content="DriftWood — авторские изделия ручной работы">
+    <meta property="og:description" content="Интернет-магазин DriftWood. Авторские изделия из дерева ручной работы.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://driftwoodbrand.ru">
     <link rel="icon" type="image/png" href="{% static 'main/favicon1.png' %}">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+
+    <!-- Yandex.Metrika counter -->
+    <script type="text/javascript">
+        (function(m,e,t,r,i,k,a){
+            m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+            m[i].l=1*new Date();
+            for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+            k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+        })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=106159473', 'ym');
+
+        ym(106159473, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", accurateTrackBounce:true, trackLinks:true});
+    </script>
+    <noscript><div><img src="https://mc.yandex.ru/watch/106159473" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <!-- /Yandex.Metrika counter -->
+
 </head>
 <body class="bg-white min-h-screen flex flex-col">
 
@@ -113,7 +137,7 @@
 
 <footer class="bg-gray-100 py-8">
     <div class="container mx-auto text-center text-white-700">
-        <p>© 2025 Мой Магазин. Все права защищены.</p>
+        <p>© 2026 DriftWood</p>
     </div>
 </footer>
 

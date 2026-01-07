@@ -21,6 +21,24 @@ class Product(models.Model):
                                  related_name='products')
     price = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.TextField(blank=True)
+    size = models.CharField(
+        max_length=100,
+        blank=True,
+        verbose_name="Размер"
+    )
+    features = models.TextField(
+        blank=True,
+        verbose_name="Особенности"
+    )
+    purpose = models.CharField(
+        blank=True,
+        verbose_name="Назначение"
+    )
+
+    materials = models.CharField(
+        blank=True,
+        verbose_name="Материалы"
+    )
     main_image = models.ImageField(upload_to='products/main/')
     stock = models.PositiveIntegerField(default=99)
     created_at = models.DateTimeField(auto_now_add=True)

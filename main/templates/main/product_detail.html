@@ -70,15 +70,55 @@
                     </button>
                 </form>
             </div>
-
-            <!-- Description -->
-            <div class="border-t pt-6">
-                <h3 class="text-sm font-medium text-black mb-3">ОПИСАНИЕ:</h3>
-                <div class="text-gray-600 prose prose-sm">
-                    {{ product.description|linebreaks }}
+            <div class="border-t pt-6 space-y-6">
+                <!-- Description -->
+                <div>
+                    <h3 class="text-sm font-medium text-black mb-3">ОПИСАНИЕ:</h3>
+                    <div class="text-gray-600 prose prose-sm">
+                        {{ product.description|linebreaks }}
+                    </div>
                 </div>
-            </div>
+                
+                <!-- Materials -->
+                {% if product.materials %}
+                <div>
+                    <h3 class="text-sm font-medium text-black mb-3">МАТЕРИАЛЫ:</h3>
+                    <div class="text-gray-600 prose prose-sm">
+                        {{ product.materials|linebreaks }}
+                    </div>
+                </div>
+                {% endif %}
 
+                <!-- Size -->
+                {% if product.size %}
+                <div>
+                    <h3 class="text-sm font-medium text-black mb-3">РАЗМЕР:</h3>
+                    <div class="text-gray-600 prose prose-sm">
+                        {{ product.size|linebreaks }}
+                    </div>
+                </div>
+                {%endif%}
+
+                <!-- features -->
+                {% if product.features %}
+                <div>
+                    <h3 class="text-sm font-medium text-black mb-3">ОСОБЕННОСТИ:</h3>
+                    <div class="text-gray-600 prose prose-sm">
+                        {{ product.features|linebreaks }}
+                    </div>
+                </div>
+                {%endif%}
+
+                <!-- purpose -->
+                {% if product.purpose %}
+                <div>
+                    <h3 class="text-sm font-medium text-black mb-3">НАЗНАЧЕНИЕ:</h3>
+                    <div class="text-gray-600 prose prose-sm">
+                        {{ product.purpose|linebreaks }}
+                    </div>
+                </div>
+                {%endif%}
+            </div>
             <!-- Info blocks (your custom fields) -->
             <div class="components grid grid-cols-1 sm:grid-cols-2 gap-y-4 border-t pt-6">
 
@@ -87,21 +127,28 @@
                     <h4 class="font-medium text-sm">Created:</h4>
                     <p class="text-gray-700">{{ product.created_at|date:"F d, Y" }}</p>
                 </div>
-                {% endif %} {% endcomment %}
+                {% endif %}
 
                 {% if product.size %}
                 <div>
-                    <h4 class="font-medium text-sm">Size:</h4>
+                    <h4 class="font-medium text-sm">Размер:</h4>
                     <p class="text-gray-700">{{ product.size }}</p>
                 </div>
                 {% endif %}
 
-                {% if product.material %}
+                {% if product.features %}
                 <div>
-                    <h4 class="font-medium text-sm">Material:</h4>
+                    <h4 class="font-medium text-sm">Особенности:</h4>
                     <p class="text-gray-700">{{ product.material }}</p>
                 </div>
                 {% endif %}
+
+                {% if product.purpose %}
+                <div>
+                    <h4 class="font-medium text-sm">Назначение:</h4>
+                    <p class="text-gray-700">{{ product.material }}</p>
+                </div>
+                {% endif %} {% endcomment %}
 
             </div>
 

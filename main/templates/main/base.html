@@ -34,7 +34,7 @@
     <!-- /Yandex.Metrika counter -->
 
 </head>
-<body class="bg-white min-h-screen flex flex-col">
+<body class="bg-white min-h-screen flex flex-col overflow-x-hidden">
 
 <header class="sticky top-0 bg-white shadow z-50">
     <div class="container mx-auto flex justify-between items-center p-4">
@@ -42,36 +42,36 @@
         <div class="flex items-center space-x-3">
             <!-- Кнопка меню -->
             <div class="relative">
-                <button id="menu-button" class="flex items-center">
-                    <img src="{% static 'main/burger.svg' %}" alt="Меню" class="h-10 cursor-pointer">
+                <button id="menu-button" class="flex items-center touch-manipulation p-1">
+                    <img src="{% static 'main/burger.svg' %}" alt="Меню" class="h-10 w-10 cursor-pointer">
                 </button>
                 
                 <!-- Выпадающее меню -->
-                <div id="dropdown-menu" class="hidden absolute left-0 mt-2 w-40 bg-white shadow-lg border rounded-lg overflow-hidden z-50">
+                <div id="dropdown-menu" class="hidden absolute left-0 mt-2 w-48 bg-white shadow-lg border rounded-lg overflow-hidden z-50">
                     <button hx-get="{% url 'main:catalog_all' %}" 
                             hx-target="#main-content" 
                             hx-push-url="true" 
-                            class="w-full text-left px-4 py-2 hover:bg-gray-100">
+                            class="w-full text-left px-4 py-3 hover:bg-gray-100 touch-manipulation">
                         Магазин
                     </button>
                     <button hx-get="{% url 'main:about' %}" 
                             hx-target="#main-content" 
                             hx-push-url="true" 
-                            class="w-full text-left px-4 py-2 hover:bg-gray-100">
+                            class="w-full text-left px-4 py-3 hover:bg-gray-100 touch-manipulation">
                         О нас
                     </button>
                     <button href="{% url 'orders:order_track' %}"
                             hx-get="{% url 'orders:order_track' %}" 
                             hx-target="#main-content" 
                             hx-push-url="true" 
-                            class="w-full text-left px-4 py-2 hover:bg-gray-100">
+                            class="w-full text-left px-4 py-3 hover:bg-gray-100 touch-manipulation">
                         Статус заказа
                     </button>
                 </div>
             </div>
             <!-- ЛОГОТИП (переход на главную) -->
             <a href="{% url 'main:index' %}"
-                class="flex items-center">
+                class="flex items-center touch-manipulation">
                 <img src="{% static 'main/logo.png' %}" 
                     alt="DriftWood" 
                     class="h-7 cursor-pointer hover:opacity-80 transition">
@@ -83,10 +83,10 @@
             <!-- КОРЗИНА -->
             <button id="cart-button"
             type="button"
-            class="relative flex items-center">
+            class="relative flex items-center touch-manipulation p-1">
                 <img src="{% static 'main/cart.png' %}"
                     alt="Корзина"
-                    class="h-8 w-8">
+                    class="h-9 w-9">
                 <span id="cart-count"
                     class="absolute -top-1 -right-1 bg-red-500 text-white
                             rounded-full text-xs w-5 h-5 flex items-center justify-center">
@@ -98,10 +98,10 @@
             hx-get="{% url 'users:profile' %}"
             hx-target="#main-content"
             hx-push-url="true"
-            class="flex items-center">
+            class="flex items-center touch-manipulation p-1">
                 <img src="{% static 'main/account.png' %}"
                     alt="Аккаунт"
-                    class="h-8 w-8 cursor-pointer hover:opacity-80 transition">
+                    class="h-9 w-9 cursor-pointer hover:opacity-80 transition">
             </a>
 
         </div>
@@ -118,7 +118,17 @@
         hx-target="#main-content"
         hx-push-url="true"
     >
-        <img src="{% static 'main/main.png' %}" alt="Главная" class="w-full h-screen object-cover cursor-pointer">
+    <picture>
+            <!-- Картинка для мобильных устройств -->
+            <source 
+                media="(max-width: 640px)" 
+                srcset="{% static 'main/mobile.png' %}">
+            
+            <!-- Картинка для десктопа (по умолчанию) -->
+            <img src="{% static 'main/main.png' %}" 
+                 alt="Главная" 
+                 class="w-full h-screen object-cover cursor-pointer">
+        </picture>
     </a>
     {% endblock %}
 </main>
@@ -126,17 +136,20 @@
 
 <!-- Модальное окно корзины -->
 <div id="main-cart-modal" 
-     class="fixed top-16 right-0 bg-white w-96 max-h-[80vh] overflow-y-auto
-            shadow-2xl border border-gray-200 rounded-xl hidden z-50 transition-all duration-300">
+     class="fixed top-16 right-0 bg-white 
+            w-full sm:w-96 max-w-full sm:max-w-sm
+            max-h-[80vh] overflow-y-auto
+            shadow-2xl border border-gray-200 rounded-xl 
+            hidden z-50 transition-all duration-300">
 </div>
 
 
-<!-- КОНТЕЙНЕР ДЛЯ УВЕДОМЛЕНИЙ - ЭТО ВАЖНО! -->
-<div id="notification-container" class="fixed bottom-4 right-4 z-[9999] flex flex-col gap-2"></div>
+<!-- КОНТЕЙНЕР ДЛЯ УВЕДОМЛЕНИЙ -->
+<div id="notification-container" class="fixed bottom-4 right-4 z-[9999] flex flex-col gap-2 max-w-[90vw] sm:max-w-md"></div>
 
 
-<footer class="bg-gray-100 py-8">
-    <div class="container mx-auto text-center text-white-700">
+<footer class="bg-gray-100 py-8 pb-safe">
+    <div class="container mx-auto text-center text-white-700 px-4">
         <p>© 2026 DriftWood</p>
     </div>
 </footer>
@@ -150,6 +163,7 @@ const dropdownMenu = document.getElementById("dropdown-menu");
 // Открытие/закрытие меню
 menuButton.addEventListener("click", (e) => {
     e.stopPropagation();
+    e.preventDefault();
     dropdownMenu.classList.toggle("hidden");
 });
 
@@ -224,7 +238,7 @@ document.body.addEventListener('htmx:afterSwap', (evt) => {
     }
 });
 
-// закрытие по клику вне корзины
+// закрытие корзины по клику вне её
 document.addEventListener("click", (e) => {
     const modal = document.getElementById("main-cart-modal");
     const cartBtn = document.getElementById("cart-button");
@@ -234,6 +248,7 @@ document.addEventListener("click", (e) => {
     }
 });
 
+// открытие/закрытие корзины
 const cartButton = document.getElementById('cart-button');
 const cartModal = document.getElementById('main-cart-modal');
 
@@ -252,6 +267,16 @@ cartButton.addEventListener('click', function (e) {
         swap: 'innerHTML'
     });
 });
+
+// Предотвращение двойного тапа (zoom) на iOS для кнопок
+let lastTouchEnd = 0;
+document.addEventListener('touchend', function (event) {
+    const now = Date.now();
+    if (now - lastTouchEnd <= 300) {
+        event.preventDefault();
+    }
+    lastTouchEnd = now;
+}, false);
 
 </script>
 

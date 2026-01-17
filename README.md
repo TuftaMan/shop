@@ -13,19 +13,19 @@
 ## 📸 Скриншоты
 
 ### Главная страница
-![Главная](screenshots/main.png)
+![Главная](https://github.com/user-attachments/assets/4f49adb6-51bd-46b1-82f5-a237e5a14311)
 
 ### Каталог товаров
-![Каталог](screenshots/catalog.png)
+![Каталог](https://github.com/user-attachments/assets/cef4c630-7d3f-4aaf-923a-5c2ac295702f)
 
 ### Корзина
-![Корзина](screenshots/cart.png)
+![Корзина](https://github.com/user-attachments/assets/851c9282-f1a3-48b7-b3d3-15d31e4af809)
 
 ### Успешное оформление заказа
-![Заказ оформлен](screenshots/order-success.png)
+![Заказ оформлен](https://github.com/user-attachments/assets/6f8ce241-e776-40ab-a1c6-24033da14996)
 
 ### Telegram - уведомление
-![Админка](screenshots/tg_notification.png)
+![ТГ](https://github.com/user-attachments/assets/fe851ef7-2628-4c0a-9ca1-8de1b6fed051)
 
 ---
 
